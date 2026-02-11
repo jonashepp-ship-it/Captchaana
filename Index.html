@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Auswahl</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #ffe6f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 350px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.grid img {
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.grid img.selected {
+    border: 3px solid hotpink;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background: hotpink;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: deeppink;
+}
+
+.result {
+    margin-top: 10px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>💘 Wähle dein Valentine 💘</h2>
+
+    <div class="grid" id="grid"></div>
+
+    <button onclick="verify()">Bestätigen</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+const images = [
+    { src: "img_1.jpeg" },
+    { src: "img_2.jpeg" },
+    { src: "img_3.jpeg" },
+    { src: "img_4.jpeg" },
+    { src: "img_5.jpeg" }
+];
+
+const grid = document.getElementById("grid");
+
+images.forEach(imgData => {
+    const img = document.createElement("img");
+    img.src = imgData.src;
+
+    img.addEventListener("click", () => {
+        document.querySelectorAll(".grid img").forEach(i => i.classList.remove("selected"));
+        img.classList.add("selected");
+    });
+
+    grid.appendChild(img);
+});
+
+function verify() {
+    const selected = document.querySelector(".selected");
+    const result = document.getElementById("result");
+
+    if (selected) {
+        result.style.color = "green";
+        result.innerText = "💖 Gute Wahl!";
+    } else {
+        result.style.color = "red";
+        result.innerText = "Bitte wähle dein Valentine aus!";
+    }
+}
+</script>
+
+</body>
+</html>
