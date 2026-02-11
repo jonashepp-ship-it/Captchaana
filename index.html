@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Auswahl</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #ffe6f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    width: 420px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.grid img {
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.grid img.selected {
+    border: 3px solid hotpink;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background: hotpink;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>💘 Wähle dein Valentine 💘</h2>
+
+    <div class="grid" id="imageGrid">
+        <!-- Bilder werden per JavaScript eingefügt -->
+    </div>
+
+    <button onclick="verify()">Bestätigen</button>
+    <p id="result"></p>
+</div>
+
+<script>
+// Bilddaten: src und ob korrekt
+const imageData = [
+    { src: "img_1.jpeg", correct: false },
+    { src: "img_2.jpeg", correct: true },
+    { src: "img_3.jpeg", correct: false },
+    { src: "img_4.jpeg", correct: false },
+    { src: "img_5.jpeg", correct: true },
+    { src: "img_6.jpeg", correct: true },
+    { src: "img_7.jpeg", correct: false },
+    { src: "img_8.jpeg", correct: true },
+    { src: "img_9.jpeg", correct: true }
+];
+
+// Bilder mischen (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Bilder in Grid einfügen
+function loadImages() {
+    const grid = document.getElementById("imageGrid");
+    shuffleArray(imageData); // Zufällige Reihenfolge
+
+    imageData.forEach(data => {
+        const img = document.createElement("img");
+        img.src = data.src;
+        img.dataset.correct = data.correct;
+        img.onclick = () => img.classList.toggle("selected");
+        grid.appendChild(img);
+    });
+}
+
+// Prüfen, ob richtige Bilder ausgewählt sind
+function verify() {
+    const images = document.querySelectorAll(".grid img");
+    let success = true;
+
+    images.forEach(img => {
+        const isCorrect = img.dataset.correct === "true";
+        const isSelected = img.classList.contains("selected");
+
+        if ((isCorrect && !isSelected) || (!isCorrect && isSelected)) {
+            success = false;
+        }
+    });
+
+    const result = document.getElementById("result");
+    if (success) {
+        window.location.href = "success.html";
+    } else {
+        result.innerText = "Bitte wähle alle richtigen Valentine aus!";
+        result.style.color = "red";
+    }
+}
+
+// Beim Laden Bilder erstellen
+window.onload = loadImages;
+</script>
+
+</body>
+</html>
